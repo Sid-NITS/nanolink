@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 import prisma from "../../../prisma/prismaClient";
 import moment from "moment";
 
-const UrlShortener: Interfaces.Controllers.Async = async (req, res, next) => {
+const UrlShortener: Interfaces.Controllers.Auth = async (req, res, next) => {
   // const data = await prisma.url.findMany();
   try {
     moment.locale("en");
@@ -20,6 +20,11 @@ const UrlShortener: Interfaces.Controllers.Async = async (req, res, next) => {
         createdAt: time,
         lastClicked: "Never",
         updatedAt: time,
+        user: {
+          connect: {
+            id: req.user.id,
+          },
+        },
       },
     });
     if (!result) {
@@ -31,7 +36,7 @@ const UrlShortener: Interfaces.Controllers.Async = async (req, res, next) => {
     return res.json({ msg, status, result });
   } catch (error) {
     console.log(error);
-    return next(Utils.Response.error("Error in sending the mail"));
+    return next(Utils.Response.error("Internal server error"));
   }
 };
 

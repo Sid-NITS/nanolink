@@ -17,7 +17,11 @@ export const signup: Interfaces.Controllers.Async = async (req, res, next) => {
   try {
     const { name, username, email, password } = req.body;
     // Check if the email already exists
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [{ username: username }, { email: email }],
+      },
+    });
     if (existingUser) {
       // Email already exists, redirect to the login page
       return res.json("Already signed up");
@@ -49,7 +53,7 @@ export const signup: Interfaces.Controllers.Async = async (req, res, next) => {
     const { msg, status } = Utils.Response.success(
       "User signed up successfully"
     );
-    return res.json({ msg, status, user: newUser, token });
+    return res.json({ msg, status, user: newUser });
   } catch (error) {
     console.log(error);
     return next(Utils.Response.error("Error in signup"));

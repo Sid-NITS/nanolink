@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
+type AuthRequest = Request & { user?: any }; // Create a new type 'AuthRequest' that extends the 'Request' type
 type Sync = (
   req: Request,
   res: Response,
@@ -12,4 +13,10 @@ type Async = (
   next: NextFunction
 ) => Promise<Response | void>;
 
-export type { Sync, Async };
+type Auth = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => Promise<Response | void>;
+
+export type { Sync, Async, Auth };

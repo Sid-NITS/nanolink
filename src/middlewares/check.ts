@@ -7,7 +7,7 @@ const validateEmail = (email: string): boolean => {
   return emailRegex.test(email);
 };
 
-export const check: Interfaces.Middlewares.Async = async (req, res, next) => {
+export const check: Interfaces.Middlewares.Async = async (req, _res, next) => {
   try {
     const { name, username, email, password } = req.body;
 

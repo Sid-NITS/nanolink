@@ -6,8 +6,9 @@ import { generateToken } from "src/utils/auth/security/generateJWTtoken";
 import { hashPassword } from "src/utils/auth/security/hashPassword";
 
 export const login: Interfaces.Middlewares.Async = async (req, res, next) => {
-  const { username, email, password } = req.body;
   try {
+    const { username, email, password } = req.body;
+
     const existingUser = await Utils.prisma.user.findFirst({
       where: {
         OR: [{ username: username }, { email: email }],

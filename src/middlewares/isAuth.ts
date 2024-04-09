@@ -6,7 +6,8 @@ import prisma from "../.././prisma/prismaClient";
 // import * as Errors from ".././globals/errors";
 import jwt from "jsonwebtoken";
 
-export const isAuth: Interfaces.Middlewares.Async = async (req, res, next) => {
+export const isAuth: Interfaces.Middlewares.Auth = async (req, res, next) => {
+  // Add the 'Request' type to the 'req' parameter
   const token = req.cookies.jwt;
   if (token) {
     try {
@@ -15,9 +16,9 @@ export const isAuth: Interfaces.Middlewares.Async = async (req, res, next) => {
         where: { id: decoded.userId },
       });
       if (!user) {
-        // User not found based on decoded user ID
         return res.status(401).json({ message: "Unauthorized - Invalid user" });
       }
+      req.user = user; // Add the 'user' property to the 'req' object
       next();
     } catch (error) {
       console.log(error);
@@ -27,6 +28,5 @@ export const isAuth: Interfaces.Middlewares.Async = async (req, res, next) => {
     }
   } else {
     res.status(401).json({ message: "Unauthorized" });
-    //  return res.redirect('/login');
   }
 };

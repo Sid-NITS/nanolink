@@ -9,7 +9,7 @@ const validateEmail = (email: string): boolean => {
 
 export const checklogin: Interfaces.Middlewares.Async = async (
   req,
-  res,
+  _res,
   next
 ) => {
   try {
